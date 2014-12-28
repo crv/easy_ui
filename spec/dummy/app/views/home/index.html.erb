@@ -2,12 +2,12 @@
 <p>Find me in app/views/home/index.html.erb</p>
 
 <div class="col-md-6">
-  <%= easy_tab_container do |t| %>
-      <% t.easy_tab :home, true, {} do %>
+  <%= easy_tab_container theme: :bordered do |t| %>
+      <% t.easy_tab :home do %>
           <div>This is home tab</div>
       <% end %>
 
-      <% t.easy_tab :products, false, {} do %>
+      <% t.easy_tab :products do %>
           <div>This is products tab</div>
       <% end %>
   <% end %>

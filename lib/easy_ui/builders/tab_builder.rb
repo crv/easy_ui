@@ -2,25 +2,36 @@ module EasyUi
   module Builders
 
     class TabBuilder
-      def initialize(view)
+
+      attr_accessor :is_active
+
+      def initialize(view, name, is_active, &block)
         @view_context = view
+        @name = name
+        @is_active = is_active || false
+        @content = block if block_given?
       end
 
-      def active_class(is_active)
-        !!is_active ? 'active' : ''
+      def active_class
+        !!@is_active ? 'active' : ''
       end
 
-      def easy_tab_li(name, is_active)
-        @view_context.content_tag :li, role: 'presentation', class: active_class(is_active) do
-          @view_context.link_to(name, "##{name}", 'aria-controls' => name, role: 'tab', data: {toggle: 'tab'})
+      def label
+        @name.capitalize
+      end
+
+      def li_html
+        @view_context.content_tag :li, role: 'presentation', class: active_class do
+          @view_context.link_to(label, "##{@name}", 'aria-controls' => @name, role: 'tab', data: {toggle: 'tab'})
         end
       end
 
-      def easy_tab_pane(name, is_active, &block)
-        @view_context.content_tag :div, role: 'tabpanel', class: "tab-pane #{active_class(is_active)}", id: name do
-          yield
+      def pane_html
+        @view_context.content_tag :div, role: 'tabpanel', class: "tab-pane #{active_class}", id: @name do
+          @content.call if @content.present?
         end
       end
+
     end
 
   end
