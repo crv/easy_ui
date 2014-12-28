@@ -59,7 +59,7 @@ module EasyUi
       def easy_tab(name, options= {}, &block)
         validate_options(name, options)
         @any_active = @any_active || (options[:active] || false)
-        tab_builder = EasyUi::Builders::TabBuilder.new(@view_context, name, options[:active], &block)
+        tab_builder = EasyUi::Builders::TabBuilder.new(@view_context, name, options, &block)
         @tabs << tab_builder
       end
     end

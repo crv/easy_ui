@@ -5,15 +5,19 @@ module EasyUi
 
       attr_accessor :is_active
 
-      def initialize(view, name, is_active, &block)
+      def initialize(view, name, options={}, &block)
         @view_context = view
         @name = name
-        @is_active = is_active || false
+        @options = options
         @content = block if block_given?
       end
 
       def active_class
-        !!@is_active ? 'active' : ''
+        !!(@options[:active] || false) ? 'active' : ''
+      end
+
+      def identifier
+        @options[:id] || @name
       end
 
       def label
@@ -22,12 +26,12 @@ module EasyUi
 
       def li_html
         @view_context.content_tag :li, role: 'presentation', class: active_class do
-          @view_context.link_to(label, "##{@name}", 'aria-controls' => @name, role: 'tab', data: {toggle: 'tab'})
+          @view_context.link_to(label, "##{identifier}", 'aria-controls' => @name, role: 'tab', data: {toggle: 'tab'})
         end
       end
 
       def pane_html
-        @view_context.content_tag :div, role: 'tabpanel', class: "tab-pane #{active_class}", id: @name do
+        @view_context.content_tag :div, role: 'tabpanel', class: "tab-pane #{active_class}", id: identifier do
           @content.call if @content.present?
         end
       end
